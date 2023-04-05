@@ -1,0 +1,35 @@
+#!/bin/bash
+
+##################################################
+# Author:	Meraj al Maksud
+# Platform:	GNU/Linux
+##################################################
+# Combine multiple events of a single device into
+# one. First edit the label variable then simply
+# run `bash input_combine`. You may have to insert
+# password as there is a superuser operation
+##################################################
+
+export label="Use evtest (sudo apt install evtest) to find out the device label"
+
+if [ command -v evsieve &> /dev/null ]; then
+	echo "Please install evsieve: https://github.com/KarsMulder/evsieve"
+	exit
+fi
+
+
+export devices=""
+
+for sysdevpath in $(find /sys/bus/usb/devices/usb*/ -name dev); do
+	syspath="${sysdevpath%/dev}"
+	devname="$(udevadm info -q name -p $syspath)"
+	if [[ "$devname" =~ ^input/event.*$ ]]; then
+	    eval "$(udevadm info -q property --export -p $syspath)"
+	    if [ "$ID_SERIAL" = "$label" ]; then
+		export devices="$devices --input /dev/$devname grab"
+	    fi
+	fi
+done
+
+#echo "evsieve $devices --output"
+sudo evsieve $devices --output &
