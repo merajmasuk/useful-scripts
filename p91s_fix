@@ -1,0 +1,39 @@
+#!/bin/bash
+
+##################################################
+# Author:	Meraj al Maksud
+# Platform:	GNU/Linux
+#
+# This is a fix for the Bloody P91s mouse issue
+# where the mouse won't respond when moving slowly
+# towards left or up direction.
+#
+# Special thanks to @Graiden and @phemmer
+# https://unix.stackexchange.com/a/719100/363734
+# https://unix.stackexchange.com/a/144735/363734
+##################################################
+
+if [ command -v evsieve &> /dev/null ]; then
+	echo "Please install evsieve: https://github.com/KarsMulder/evsieve"
+	exit
+elif [ command -v evtest &> /dev/null ]; then
+	echo "Please install evtest: sudo apt install evtest"
+	exit
+fi
+
+
+export devices=""
+
+for sysdevpath in $(find /sys/bus/usb/devices/usb*/ -name dev); do
+	syspath="${sysdevpath%/dev}"
+	devname="$(udevadm info -q name -p $syspath)"
+	if [[ "$devname" =~ ^input/event.*$ ]]; then
+	    eval "$(udevadm info -q property --export -p $syspath)"
+	    if [ "$ID_SERIAL" = "COMPANY_USB_Device" ]; then
+		export devices="$devices --input /dev/$devname grab"
+	    fi
+	fi
+done
+
+#echo "evsieve $devices --output"
+evsieve $devices --output &
