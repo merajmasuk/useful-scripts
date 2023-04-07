@@ -13,14 +13,17 @@
 # https://unix.stackexchange.com/a/144735/363734
 ##################################################
 
-if [ command -v evsieve &> /dev/null ]; then
-	echo "Please install evsieve: https://github.com/KarsMulder/evsieve"
-	exit
-elif [ command -v evtest &> /dev/null ]; then
-	echo "Please install evtest: sudo apt install evtest"
+# Check if the script is being run with root privileges
+if [ "$EUID" -ne 0 ]; then
+	echo "Please run this script as root or with sudo."
 	exit
 fi
 
+# Check if evtest and evsieve are installed
+if [ ! command -v evtest &> /dev/null ] || [ ! command -v evsieve &> /dev/null ]; then
+	echo "Please install evtest and evsieve: sudo apt install evtest evsieve"
+	exit
+fi
 
 export devices=""
 
