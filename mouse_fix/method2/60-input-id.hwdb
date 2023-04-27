@@ -1,0 +1,6 @@
+id-input:modalias:input:b0003v09DApFEC3*
+  ID_INPUT_MOUSE=1
+
+# change b0003v09DApFEC3* to value from any /sys/class/input/eventN/device/modalias
+# file related to your mouse, then run `systemd-hwdb update` to apply hwdb changes
+# special thanks: https://unix.stackexchange.com/a/719100/363734
