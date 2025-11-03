@@ -8,8 +8,8 @@ dns="103.28.121.11"
 # Define the whitelist
 WHITELIST=(
     "192.168.0.0/16" # Local network subnet
-    $allowed_ip
-    $dns
+    "$allowed_ip"
+    "$dns"
 )
 
 

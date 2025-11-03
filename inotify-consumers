@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Get the procs sorted by the number of inotify watches

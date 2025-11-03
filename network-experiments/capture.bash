@@ -8,7 +8,7 @@ pc_ips=(
 
 # Network interface
 interface="eno1"
-dir="/home/meraj/contest"
+dir="/home/user/contest"
 
 # Capture traffic for each PC
 for ip in "${pc_ips[@]}"; do

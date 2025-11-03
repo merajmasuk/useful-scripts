@@ -12,4 +12,3 @@ ExecStart=/usr/local/bin/suspend-gnome-shell.sh suspend
 [Install] 
 WantedBy=systemd-suspend.service 
 WantedBy=systemd-hibernate.service 
-

@@ -20,7 +20,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Check if evtest and evsieve are installed
-if [ ! command -v evtest &> /dev/null ] || [ ! command -v evsieve &> /dev/null ]; then
+if ! command -v evtest &> /dev/null || ! command -v evsieve &> /dev/null; then
 	echo "Please install evtest and evsieve: sudo apt install evtest evsieve"
 	exit
 fi
@@ -29,14 +29,13 @@ export devices=""
 
 for sysdevpath in $(find /sys/bus/usb/devices/usb*/ -name dev); do
 	syspath="${sysdevpath%/dev}"
-	devname="$(udevadm info -q name -p $syspath)"
+	devname="$(udevadm info -q name -p "$syspath")"
 	if [[ "$devname" =~ ^input/event.*$ ]]; then
-	    eval "$(udevadm info -q property --export -p $syspath)"
+	    eval "$(udevadm info -q property --export -p "$syspath")"
 	    if [ "$ID_SERIAL" = "COMPANY_USB_Device" ]; then
 		export devices="$devices --input /dev/$devname grab"
 	    fi
 	fi
 done
 
-#echo "evsieve $devices --output"
-evsieve $devices --output &
+evsieve "$devices" --output &

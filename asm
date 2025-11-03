@@ -16,12 +16,12 @@ ITALIC='\033[3m'
 
 param=$1
 
-if [ command -v nasm &> /dev/null ]
+if command -v nasm &> /dev/null
 then
 	echo "Please install nasm"
 	echo "Try: sudo apt install nasm"
 	exit
-elif [ command -v ld &> /dev/null ]
+elif command -v ld &> /dev/null
 then
 	echo "Please install gcc"
 	echo "Try: sudo apt install gcc"
@@ -38,7 +38,6 @@ name=${src:0:-4}
 object=$name.o
 exe=$name.out
 
-nasm -f elf64 $src
-ld $object -o $exe
-./$exe
-
+nasm -f elf64 "$src"
+ld "$object" -o "$exe"
+./"$exe"
